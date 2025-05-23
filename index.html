@@ -44,6 +44,10 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 10px;
+    }
+    .clear-btn {
+      background-color: #f44336;
     }
     .bar-group {
       margin-top: 20px;
@@ -104,14 +108,16 @@
     </div>
 
     <div class="input-group">
-      <label>Entertainment - Weekly Budget (₹)</label>
-      <input type="number" id="entertainmentBudget" required />
-      <label>Entertainment - Weekly Spent (₹)</label>
-      <input type="number" id="entertainmentSpent" required />
+      <label>Boyfriend - Weekly Budget (₹)</label>
+      <input type="number" id="boyfriendBudget" required />
+      <label>Boyfriend - Weekly Spent (₹)</label>
+      <input type="number" id="boyfriendSpent" required />
     </div>
 
     <button type="submit">Save This Week</button>
   </form>
+
+  <button class="clear-btn" onclick="clearAllData()">Clear All Data</button>
 
   <div id="chartArea"></div>
 
@@ -122,7 +128,7 @@
 </div>
 
 <script>
-  const categories = ["Food", "Transport", "Entertainment"];
+  const categories = ["Food", "Transport", "Boyfriend"];
 
   // Load and display history on page load
   window.addEventListener("DOMContentLoaded", () => {
@@ -132,7 +138,6 @@
   document.getElementById("budgetForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    // Get values
     const entry = {
       date: new Date().toLocaleDateString(),
       data: {}
@@ -144,9 +149,8 @@
       entry.data[cat] = { budget, spent };
     });
 
-    // Get history from localStorage
     let history = JSON.parse(localStorage.getItem("weeklyHistory")) || [];
-    history.push(entry); // Add new entry
+    history.push(entry);
     localStorage.setItem("weeklyHistory", JSON.stringify(history));
 
     showChart(entry.data);
@@ -206,6 +210,14 @@
 
       container.appendChild(div);
     });
+  }
+
+  function clearAllData() {
+    if (confirm("Are you sure you want to delete all saved data?")) {
+      localStorage.removeItem("weeklyHistory");
+      document.getElementById("historyEntries").innerHTML = "";
+      document.getElementById("chartArea").innerHTML = "";
+    }
   }
 </script>
 </body>
